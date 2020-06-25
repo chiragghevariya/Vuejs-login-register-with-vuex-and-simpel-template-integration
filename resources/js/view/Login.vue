@@ -33,6 +33,7 @@
         <div class="row mb-5 align-items-end">
           <div class="col-md-6" data-aos="fade-up">
             <h2>Login Here</h2>
+            <button class="btn btn-primary" @click="AuthProvider('github')">Github Login</button>
           </div>
 
         </div>
@@ -92,14 +93,55 @@
           }
         },
         mounted() {
-            console.log('Component mounted Login.')
+
         },
         methods:{
 
           loginSave(){
 
             this.$store.dispatch('loginSave',this.loginData);
-          }
+          },
+          AuthProvider(provider) {
+            
+              var self = this
+              
+              this.$auth.authenticate(provider).then(response =>{
+                  self.SocialLogin(provider,response)
+                }).catch(err => {
+                    console.log({err:err})
+                })
+            },
+            
+            SocialLogin(provider,response){
+                this.$http.post('/sociallogin/'+provider,response).then(response => {
+                    
+                    if (response.data.status == 200) {
+                    
+                    Vue.notify({
+                        group: 'foo',
+                        title: 'Login successfully done.',
+                        type:'success'
+                    });
+
+                    let token = response.data.access_token;
+                    localStorage.setItem('token',token);
+                    this.$store.commit('SET_TOKEN');
+                    window.location='dashboard';
+                
+                }
+
+                }).catch(error => {
+
+                    if(error.response.status == false){
+                        Vue.notify({
+                            group: 'foo',
+                            title: error.response.message,
+                            type:'error'
+                        });
+                    }
+                    console.log({error:error});
+                })
+            }
         },
         metaInfo: {
             title: 'Login ',

@@ -71,8 +71,6 @@ export default {
     },
     mounted() {
 
-        console.log(this.$store.state.isLoggedIn);
-        console.log('Component mounted Dashboard.')
     }
 }
 </script>

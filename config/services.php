@@ -29,5 +29,10 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+     'github' => [
+        'client_id'     => '7c6917fec35095dbeb33',
+        'client_secret' => 'd16e0653cf0fa26bd30b7791b0858c0c2315ca11',
+        'redirect'      => 'http://localhost/vue-laravel/auth/github/callback',
+    ],
 
 ];

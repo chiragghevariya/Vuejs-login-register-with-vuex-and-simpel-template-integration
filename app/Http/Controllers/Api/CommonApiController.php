@@ -7,10 +7,56 @@ use Validator;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use Hash;
+use Socialite;
+use JWTAuth;
 
 class CommonApiController extends ApiCommanFunctionController
 {
 
+    public function SocialSignup($provider)
+    {
+        $user = Socialite::driver($provider)->stateless()->user();
+        if ($user) {
+           $userData = $user->user; 
+
+           $obj = \App\User::where('email',$userData['email'])->first();
+
+           if ($obj == null) {
+             
+            $objNew = new User;
+            $objNew->name = $userData['name'];
+            $objNew->email = $userData['email'];
+            $objNew->save();
+
+            if (!empty($obj)) {
+                
+                if (!$token=JWTAuth::fromUser($obj)) {
+
+                    return $this->sendError('Unauthorized',[],401);
+                }
+                
+                return $this->respondWithToken($token);
+            
+            }else{
+
+                return $this->sendError(false,"No data found",402);
+            }
+
+           }else{
+
+                if (!$token=JWTAuth::fromUser($obj)) {
+
+                    return $this->sendError('Unauthorized',[],401);
+                }
+                
+                return $this->respondWithToken($token);
+           }
+
+        }else{
+
+            return $this->sendError(false,"No data found",402);
+        }
+    }
      /**
      * Get a JWT via given credentials.
      *

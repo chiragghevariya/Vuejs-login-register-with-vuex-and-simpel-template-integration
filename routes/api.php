@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', 'Api\CommonApiController@register');
 Route::post('login', 'Api\CommonApiController@login');
-
+Route::post('sociallogin/{provider}', 'Api\CommonApiController@SocialSignup');
 
 Route::group(['middleware'=>'auth:api'],function(){
 

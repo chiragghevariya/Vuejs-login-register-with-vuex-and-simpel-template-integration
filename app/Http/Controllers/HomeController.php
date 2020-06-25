@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Socialite;
 
 class HomeController extends Controller
 {
@@ -39,5 +40,17 @@ class HomeController extends Controller
     public function welcome(){
 
         return "welcome page";
+    }
+
+    public function SocialSignup($provider)
+    {
+        $user = Socialite::driver($provider)->stateless()->user();
+        dd($user);exit;
+        return response()->json($user);
+    }
+
+    public function callBackGithub(){
+        
+        return view('layouts.app');
     }
 }

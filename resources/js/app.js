@@ -19,6 +19,16 @@ import AuthBearer from '@websanova/vue-auth';
 import { store } from './store/store.js';
 import Notifications from 'vue-notification';
 import VueMeta from 'vue-meta';
+import VueSocialauth from 'vue-social-auth';
+
+Vue.use(VueSocialauth, {
+  providers: {
+    github: {
+      clientId: '7c6917fec35095dbeb33',
+      redirectUri: 'http://localhost/vue-laravel/auth/github/callback' // Your client app URL
+    }
+  }
+})
   
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
@@ -57,7 +67,7 @@ const ifNotAuthenticated = (to, from, next) => {
 }
 
 const ifAuthenticated = (to, from, next) => {
-  console.log('check ayth',store.state.isLoggedIn);
+  
   if (store.state.isLoggedIn) {
     next()
     return
@@ -105,6 +115,14 @@ const routes = [
     path: '/dashboard', 
     component: require('./view/Dashboard.vue').default ,
     beforeEnter: ifAuthenticated,
+  },
+  { 
+    name:"SocialLogin",
+    path: '/auth/:provider/callback', 
+    component: {
+      template: '<div class="auth-component"></div>'
+    }
+    
   }
 ]
  

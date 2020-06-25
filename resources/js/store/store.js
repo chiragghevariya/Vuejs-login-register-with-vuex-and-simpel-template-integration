@@ -63,7 +63,6 @@ export const store = new Vuex.Store({
             let uri = 'http://localhost/vue-laravel/api/me';
             axios.post(uri).then((response) => {
                 
-                console.log("set user data",response.data.data);                
                 if (response.data.status == 200) {
                     
                     commit('SET_TOKEN');
@@ -72,7 +71,6 @@ export const store = new Vuex.Store({
             
             }).catch(error => {
                 
-                console.log(error.response.data);
                 if (error.response.data.status == 401) {
                    
                     commit('SOMETHING_WANT_WRONG_LOGOUT');
@@ -90,11 +88,9 @@ export const store = new Vuex.Store({
         },
         logout({commit},payload){
 
-            console.log("payload",payload);
             let uri = 'http://localhost/vue-laravel/api/logout';
             axios.post(uri,{'payload':payload}).then((response) => {
 
-                console.log("logout",response.data);
                 if (response.data.status == 200) {
                     
                     console.log("in logout");
